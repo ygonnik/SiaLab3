@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    class Program
+    {
+        static void Show(List<Queue<int>> list)
+        {
+            for (int i = 1; i <= list.Count; i++)
+            {
+                Console.WriteLine();
+                Console.Write($"Очередь {i}: ");
+                foreach (int elem in list[i - 1])
+                {
+                    Console.Write($"{elem} ");
+                }
+            }
+            Console.WriteLine();
+        }
+
+        static void Kick(int k, List<Queue<int>> list)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Клиент {list[k].Dequeue()} был обслужен в очереди {k + 1}");
+        }
+
+        static void Add(int k, int numb, List<Queue<int>> list)
+        {
+            Console.WriteLine();
+            list[k].Enqueue(numb);
+            Console.WriteLine($"Клиент {numb} добавлен в очередь {k + 1}.");
+        }
+
+        static void Service(int n, List<Queue<int>> list)
+        {
+            Random rnd = new Random();
+
+            int n1 = 0; //кол-во обслуженных
+            int n2 = n; //кол-во необслуженных
+            int numb = 1; //номер клиента
+            int k;
+            bool flag = false;
+
+            while((n1 != n) || (n2 != 0))
+            {
+                if (n1 != n)
+                {
+                    k = rnd.Next(0, list.Count); //выбор очереди
+                    Add(k, numb++, list);
+                    n1++;
+                    flag = true;
+                }
+
+                k = rnd.Next(0, list.Count);
+                if (list[k].Count != 0)
+                {
+                    Kick(k, list);
+                    n2--;
+                    flag = true;
+                }
+                if (flag) Show(list);
+                flag = false;
+            }
+            Console.WriteLine("Все обслужены.");
+        }
+
+        static void Create(int n, List<Queue<int>> list)
+        {
+            for(int i = 0; i < n; i++)
+            {
+                Queue<int> queue = new Queue<int>();
+                list.Add(queue);
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите кол-во очередей:");
+            int M = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите кол-во клиентов:");
+            int N = Convert.ToInt32(Console.ReadLine());
+
+            List < Queue<int> > list = new List<Queue<int>>();
+            Create(M, list);
+            Service(N, list);
+        }
+    }
+}
