@@ -8,47 +8,57 @@ namespace ConsoleApp4
 {
     class Program
     {
-        static int Pop(List<int> list)
+        static int[] Add(int[] source)
         {
-            int k = list[0];
-            for(int i = 0; i < list.Count - 1; i++)
-            {
-                list[i] = list[i + 1];
-            }
-            list.RemoveAt(list.Count - 1);
+            int[] dest = new int[source.Length + 1];
+            Array.Copy(source,dest, source.Length);
+
+            return dest;
+        }
+
+        static int[] RemoveAt(int[] source, int index)
+        {
+            int[] dest = new int[source.Length - 1];
+            if (index > 0)
+                Array.Copy(source, 0, dest, 0, index);
+
+            if (index < source.Length - 1)
+                Array.Copy(source, index + 1, dest, index, source.Length - index - 1);
+
+            return dest;
+        }
+
+        static int Pop(ref int[] arr)
+        {
+            int k = arr[0];
+            arr = RemoveAt(arr, 0);
             return k;
         }
 
-        static void Push(List<int> list, int k)
+        static void Push(ref int[] arr, int k)
         {
-            if (list.Count == 0)
+            arr = Add(arr);
+            for(int i = 0; i < arr.Length; i++)
             {
-                list.Add(k);
-            }
-            else
-            {
-                list.Add(k);
-                for (int i = 0; i < list.Count; i++)
+
+                if (arr[i] > k)
                 {
-                    if (list[i] > k)
+                    for (int j = arr.Length - 2; j >= i; j--)
                     {
-                        for (int j = list.Count - 2; j >= i; j--)
-                        {
-                            list[j + 1] = list[j];
-                        }
-                        list[i] = k;
-                        break;
+                        arr[j + 1] = arr[j];
                     }
+                    arr[i] = k;
+                    break;
                 }
             }
         }
 
         static void Main(string[] args)
         {
-            List<int> list = new List<int>() { 1,  2, 4, 5, 6, 7 };
-            Push(list, 3);
-            Pop(list);
-            foreach (int n in list) Console.WriteLine(n);
+            int[] arr = new int[6] { 1, 2, 4, 5, 6, 7 };
+            Push(ref arr, 3);
+            Pop(ref arr);
+            foreach (int n in arr) Console.WriteLine(n);
         }
     }
 }
