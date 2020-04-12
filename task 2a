@@ -8,6 +8,11 @@ namespace ConsoleApp4
 {
     class Program
     {
+        static void Output(int[] arr)
+        {
+            foreach (int n in arr) Console.WriteLine(n);
+        }
+        
         static int[] Add(int[] source)
         {
             int[] dest = new int[source.Length + 1];
@@ -58,7 +63,7 @@ namespace ConsoleApp4
             int[] arr = new int[6] { 1, 2, 4, 5, 6, 7 };
             Push(ref arr, 3);
             Pop(ref arr);
-            foreach (int n in arr) Console.WriteLine(n);
+            Output(arr);
         }
     }
 }
