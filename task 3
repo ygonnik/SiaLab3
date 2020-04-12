@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    class Status
+    {
+        public int height;
+        public int src;
+        public int dest;
+        public int temp;
+        public int step;
+
+        public Status(int Height, int Src, int Dest, int Temp, int Step)
+        {
+            height = Height; //кол-во дисков
+            src = Src; //откуда
+            dest = Dest; //куда
+            temp = Temp;  //вспомогательный стержень
+            step = Step;
+        }
+    }
+
+    class Program
+    {
+        
+
+        static void func(int height, int src, int dest, int temp)
+        {
+            List < Status > list = new List<Status>(); // список состояний
+            Status status = new Status(height, src, dest, temp, 0);
+            Status newStatus;
+            list.Add(status);
+
+            while(list.Count != 0)
+            {
+                switch(list[list.Count - 1].step)
+                {
+                    case 0:
+                        if (list[list.Count - 1].height == 0)
+                            list.RemoveAt(list.Count - 1);
+                        else
+                        {
+                            list[list.Count - 1].step++;
+                            newStatus = new Status(list[list.Count - 1].height - 1, list[list.Count - 1].src, list[list.Count - 1].temp, list[list.Count - 1].dest, 0);
+                            list.Add(newStatus);
+                        }
+                        break;
+                    case 1:
+                        Console.WriteLine($"Переложить диск с башни {list[list.Count - 1].src} на башню {list[list.Count - 1].dest}.");
+                        list[list.Count - 1].step++;
+                        newStatus = new Status(list[list.Count - 1].height - 1, list[list.Count - 1].temp, list[list.Count - 1].dest, list[list.Count - 1].src, 0);
+                        list.Add(newStatus);
+                        break;
+                    case 2:
+                        list.RemoveAt(list.Count - 1);
+                        break;
+                }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите высоту башни:");
+            int n = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            func(n, 1, 2, 3);
+        }
+    }
+}
