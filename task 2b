@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    class Program
+    {
+        static void Output(int[] arr)
+        {
+            foreach (int n in arr) Console.WriteLine(n);
+        }
+
+        static int[] Add(int[] source)
+        {
+            int[] dest = new int[source.Length + 1];
+            Array.Copy(source,dest, source.Length);
+
+            return dest;
+        }
+
+        static int[] RemoveAt(int[] source, int index)
+        {
+            int[] dest = new int[source.Length - 1];
+            if (index > 0)
+                Array.Copy(source, 0, dest, 0, index);
+
+            if (index < source.Length - 1)
+                Array.Copy(source, index + 1, dest, index, source.Length - index - 1);
+
+            return dest;
+        }
+
+        static int Pop(ref int[] arr)
+        {
+            int max = arr[0];
+            int id = 0;
+            for(int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] > max)
+                {
+                    max = arr[i];
+                    id = i;
+                }
+            }
+
+            int k = arr[id];
+            arr = RemoveAt(arr, id);
+            return k;
+        }
+
+        static void Push(ref int[] arr, int k)
+        {
+            arr = Add(arr);
+            arr[arr.Length - 1] = k;
+        }
+
+        static void Main(string[] args)
+        {
+            int[] arr = new int[6] { 1, 2, 4, 5, 6, 7 };
+            Push(ref arr, 3);
+            Pop(ref arr);
+            Output(arr);
+        }
+    }
+}
